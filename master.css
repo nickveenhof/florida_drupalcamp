@@ -25,15 +25,15 @@ article section section {
 /** STEP STYLES **/
 section {
 
-	width: 900px;
+  width: 900px;
   height: 500px;
-	font-size: 20pt;
-	min-height: 600px;
+  font-size: 20pt;
+  min-height: 600px;
 
-	display: block;
+  display: block;
   padding: 0px 15px;
 
-	text-align: center;
+  text-align: center;
 
   color: whitesmoke;
 	z-index: 1;
