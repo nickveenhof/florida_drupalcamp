@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nick Veenhof | Master Thesis Presentation</title>
+
+    <meta name="description" content="Drupal Search">
+    <meta name="author" content="Nick Veenhof" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1.0, user-scalable=yes" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/syntax/jquery.syntax.min.js" ></script>
+    <script type="text/javascript" src="js/jmpress.all.min.js"></script>
+    <script type="text/javascript" src="js/jmpress.start.js"></script>
+    <script type="text/javascript">
+      // This function is executed when the page has finished loading.
+      jQuery(function($) {
+        // This function highlights (by default) pre and code tags which are annotated correctly.
+        $.syntax();
+      });
+   </script>
+   <link href="basic-animations.min.css" rel="stylesheet" type="text/css" />
+   <link href="master.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <article data-template="main">
+      <section id="start">
+        <p><strong>Let the battle begin!</strong></p>
+        <p><strong>Search API vs Apachesolr</strong></p>
+
+        <img src="images/fighting-kittens.jpg" height="400px" />
+      </section>
+      <section id="start">
+        <h1>Drupal Dev Days</h1>
+        <p>Drupal Search and Solr Wizardry</p>
+        <p>&nbsp;</p>
+        <img src="images/druplicon.png" height="100px" />
+        <img src="images/solr_logo_rgb.png" height="100px" />
+        <p class="small-text">
+          <em>Matthias Hutterer</em><br/>
+          <em>Nick Veenhof</em><br/>
+        </p>
+      </section>
+      <section id="introduction" data-template="rotation">
+        <h1 class="title">&nbsp;Introduction&nbsp;</h1>
+        <section>
+          <img src="images/wordcloud.png" height="450px"/>
+        </section>
+        <section>
+          <h2 style="margin-bottom:-10px">Nick Veenhof</h2>
+          <div style="text-align:center; width:50%; margin: 0 auto;">
+            <p style="float:left; margin-top: 70px"><a href="http://www.twitter.com/nick_vh">@nick_vh</a></p>
+            <p style="float:left; margin-left:100px;"><img src="images/nick.png" height="100px"/></p>
+            <p style="clear:both;"/>
+          </div>
+          <p class="small-text"><a href="http://www.nickveenhof.be" target="_blank">http://www.nickveenhof.be</a></p>
+          <p class="small-text"><a href="http://drupal.org/user/122682/" target="_blank">Nick_vh @ Drupal.org</a></p>
+          <p>
+            <img src="images/KAHO_grootlogo.gif" height="50px"/>
+            <img src="images/logoUPC.gif" height="50px"/>
+            <img src="images/logo-front.png" height="50px"/>
+            <img src="images/ateneatech_0.png" height="50px"/>
+            <img src="images/logo_atsistemas_620x220.png" height="50px"/>
+            <img src="images/acquia_logo_gradient.png" height="50px"/>
+          </p>
+        </section>
+        <section>
+          <h2 style="margin-bottom:-10px">Matthias Hutterer</h2>
+          <div style="text-align:center; width:50%; margin: 0 auto;">
+            <p style="clear:both;"></p>
+          </div>
+          <p class="small-text"><a href="http://drupal.org/user/59747" target="_blank">mh86 @ Drupal.org</a></p>
+          <ul>
+            <li>Drupal contributions including Email Field and Taxonomy Manager</li>
+            <li style="margin-top: 20px">Working at epiqo
+              <ul>
+                <li>Building powerful searches for job portals</li>
+                <li>Main motivation for a new Search API</li>
+              </ul>
+            </li>
+          </ul>
+          <p>
+            <img style="margin-top: 25px" src="images/epiqo_logo_large.png" height="120px"/>
+          </p>
+        </section>
+      </section>
+      <section id="click-recipes-search-api" data-template="rotation">
+        <h1 class="title">&nbsp;Search Api&nbsp;</h1>
+         <section>
+          <h3>About</h3>
+          <ul>
+            <li>Framework for easily creating searches</li>
+            <li>Abstracts from data sources and backend implementations
+            <li>Large ecosystem with extensions, e.g. backends</li>
+            <li>Facet API integration</li>
+            <li>Heavily based on Entity API
+              <ul>
+                <li>Provides metadata</li>
+                <li>Used for index and server configurations</li>
+              </ul>
+           </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Basic Structure</h3>
+          <img src="images/search_api_architecture.jpg" width="650px"/>
+        </section>
+        <section>
+          <h3>Index any data</h3>
+          <ul>
+            <li>Different datasources</li>
+            <li>One datasource: entities</li>
+            <li>Based on Entity API:
+              <ul>
+                <li>Each property can be indexed</li>
+                <li>Properties of related entities can be indexed</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>How to configure your index - Fields</h3>
+          <img src="images/search_api_fields_ui.jpg" width="650px"/>
+        </section>
+        <section>
+          <h3>Search API Views</h3>
+          <ul>
+            <li>Full Views support</li>
+            <li>Display any property of an entity</li>
+            <li>Use any indexed field as filter, argument or sort</li>
+            <li>Most code based on Entity API's views integration</li>
+            <li>By default: data retrieved via entity load
+              <ul>
+                <li>Can be bypassed ("Retrieve data from Solr" setting in server)</li>
+              </ul>
+            </li>
+            <li>Alternative: Search API pages</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Extensions</h3>
+          <ul>
+            <li>Backends
+              <ul>
+                <li>Apache Solr</li>
+                <li>Database</li>
+                <li>Fuzzy Search</li>
+                <li>Xapian</li>
+                <li>Elasticsearch (But we need you!)</li>
+                <li>...</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Extensions</h3>
+          <ul>
+            <li>Features
+              <ul>
+                <li>Search API Autocomplete</li>
+                <li>Attachments</li>
+                <li>Saved Searches</li>
+                <li>Location</li>
+                <li>Pretty Facets Paths</li>
+                <li>Slider (in progress)</li>
+                <li>...</li>
+              </ul>
+            </li>
+            <li>Current dev: Search API Statistics (GSOC Project)</li>
+          </ul>
+        </section>
+      </section>
+      <section id="code-recipes-search-api" data-template="rotation">
+        <h1 class="title">&nbsp;Search Api Recipes&nbsp;</h1>
+        <section>
+          <h3>API Overview</h3>
+          <ul>
+            <li>CRUD hooks for indexes and servers</li>
+            <li>Hooks for adding
+              <ul>
+                <li>data sources</li>
+                <li>backends</li>
+                <li>data alterations</li>
+                <li>processors</li>
+              </ul>
+            </li>
+            <li>Hook fired when indexing items</li>
+            <li>Hook fired when executing a search</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Implementing a Backend - Part I</h3>
+            <pre class="syntax php-script">
+
+/**
+ * Implements hook_search_api_service_info().
+ */
+function search_api_solr_search_api_service_info() {
+  $services['search_api_solr_service'] = array(
+    'name' => t('Solr service'),
+    'class' => 'SearchApiSolrService',
+    'description' => t('Index items using an Apache Solr search server.'),
+  );
+  return $services;
+}
+
+            </pre>
+        </section>
+        <section>
+          <h3>Implementing a Backend - Part II</h3>
+            <pre class="syntax php-script">
+/**
+ * Search service class using Solr server.
+ */
+class SearchApiSolrService extends SearchApiAbstractService {
+  public function configurationForm(array $form, array &$form_state) {}
+  public function supportsFeature($feature) {}
+  public function addIndex(SearchApiIndex $index) {}
+  public function removeIndex($index) {}
+  public function indexItems(SearchApiIndex $index, array $items) {}
+  public function deleteItems($ids = 'all', SearchApiIndex $index = NULL) {}
+  public function search(SearchApiQueryInterface $query) {}
+}
+            </pre>
+        </section>
+        <section>
+          <h3>How to index custom fields</h3>
+            <pre class="syntax php-script">
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function example_entity_property_info_alter(&$info) {
+  $info['node']['properties']['example_random_number'] = array(
+    'type' => 'integer',
+    'label' => t('Random number'),
+    'computed' => TRUE,
+    'getter callback' => 'example_property_random_number_getter_callback',
+  );
+}
+
+/**
+ * Getter callback for a random number between 1 and 100.
+ */
+function example_property_random_number_getter_callback($item) {
+  return mt_rand(1, 100);
+}
+          </pre>
+        </section>
+        <section>
+          <h3>Search API Query Alter</h3>
+            <pre class="syntax php-script">
+/**
+ * Implements hook_search_api_query_alter().
+ */
+function example_search_api_query_alter(SearchApiQueryInterface $query) {
+  $index = $query->getIndex();
+  if ($index->machine_name == "my_search") {
+    $query->condition('my_field', 'condition');
+  }
+}
+          </pre>
+        </section>
+        <section>
+          <h3>Search API Solr Query Alter</h3>
+            <pre class="syntax php-script">
+/**
+ * Implements hook_search_api_solr_query_alter().
+ */
+function example_search_api_solr_query_alter(array &$call_args, SearchApiQueryInterface $query) {
+  // Change the Solr request handler.
+  $call_args['params']['defType'] = 'edismax';
+
+  // Wrap search wards with wildcards for partial matches.
+  // Note: only excerpt of full code.
+  $key_array = array();
+  foreach (explode(' ', $query->getOriginalKeys()) as $k) {
+    $key_array[] = "*$k*";
+  }
+  $call_args['query'] = implode(' ', $key_array);
+}
+          </pre>
+        </section>
+      </section>
+      <section id="click-recipes-apachesolr" data-template="rotation">
+        <h1 class="title">&nbsp;Apachesolr Recipes&nbsp;</h1>
+        <section>
+          <h3>Apache Solr</h3>
+          <ul>
+            <li>Open Source Enterprise Search Platform</li>
+            <li>Apache Foundation</li>
+            <li>Full-text search, highlighting, faceted search, clustering, rich document handling</li>
+            <li>Distributed</li>
+            <li>Replication/scalable</li>
+            <li>Java</li>
+            <li>REST HTTP and answers in XML/JSON and some others</li>
+            <li>Not Relational</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>How to create a Range/Slider facet</h3>
+          <ul>
+            <li>Facet Api</li>
+            <li>Facet Api Slider</li>
+            <li>Works for any numeric type</li>
+            <li>Code is pending for having date sliders</li>
+            <li>Quirk : In the facet, manually put the query type on Numeric Range when selecting the Slider widget</li>
+          </ul>
+          <img src="images/slider.jpg"/>
+        </section>
+        <section>
+          <h3>How to index locations</h3>
+          <ul>
+            <li>Apachesolr geo, Apachesolr location</li>
+            <li>Theme your results to have maps based on those locations.</li>
+            <li>TIP: Add custom code to get nice range facets</li>
+          </ul>
+        </section>
+        <section>
+          <h3>How to index attachments</h3>
+          <ul>
+            <li>Apachesolr Attachments</li>
+            <ul>
+              <li>Refactored</li>
+              <li>Recognized as an entity linked to the node entity</li>
+              <li>Local or remote extractions</li>
+              <li>Tip: Attachments to other entities? Easy to link them in custom code</li>
+              <li>Quirk: No media support, we need help! Someone? Anyone? :)</li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h3>How to have a common index between Drupal 6 and 7</h3>
+          <ul>
+            <li>Apachesolr Multisitesearch</li>
+            <ul>
+              <li>Refactored</li>
+              <li>Small module, most of it is in the core module.</li>
+              <li>7.x-1.x API and schema = 6.x-3.x API and schema, meaning easier maintenance of custom code</li>
+              <li>Tip: Theme the results so you know where they are coming from</li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <h3>How can I reduce the http request when using thumbnails</h3>
+          <pre class="syntax php-script">
+function HOOK_apachesolr_index_document_build(ApacheSolrDocument $document, $entity, $env_id) {
+  // Warning : Simplified, you need more checks!
+  // Encode the image to base64
+  $img64 = base64_encode_image($entity->field_image['filename']);
+  // Add it to the binary dynamic index field
+  $document->setMultiValue('xm_field_img64', $img64);
+}
+function HOOK_apachesolr_query_alter(DrupalSolrQueryInterface $query) {
+  $query->addParam('fl', 'xm_field_img64');
+}
+          </pre>
+        </section>
+        <section>
+          <h3>How can I create my own Query object?</h3>
+          New query object and how to make a query + using the fq/filters
+
+          <pre class="syntax php-script">
+$solr = apachesolr_get_solr();
+$query = apachesolr_drupal_query("custom", array('q' => 'mykeys'), 'sort_label asc', 'search/path');
+$query->setSolrsort('sort_name', 'desc');
+$query->addFilter('bundle', (article OR page));
+$query->removeFilter('bundle');
+$query->addParam('fq', "bundle:(article OR page)");
+$query->addParam('fq', "field_date:[1970-12-31T23:59:59Z TO NOW]");
+$resp = $query->search();
+            </pre>
+        </section>
+      </section>
+      <section id="solr-internals" data-template="rotation">
+        <h1 class="title">Solr internals</h1>
+        <section>
+          <h3>What do all these FQ, FL. params mean?</h3>
+          <ul>
+            <li>
+              Query (q)
+              <br/><code class="syntax">select/?q=Superhero</code>
+              <br/>
+              <span class="smaller-text">
+                <a href="http://lucene.apache.org/core/3_6_0/queryparsersyntax.html">http://lucene.apache.org/core/3_6_0/queryparsersyntax.html</a>
+              </span>
+            </li>
+            <li>
+              sort, start, rows
+              <br/><code class="syntax">select/?q=Superhero&start=0&rows=10&sort=sort_name+asc</code>
+              <br/><span class="smaller-text">Can sort on integers, but for strings you need to use sort_yourfield</span>
+            </li>
+            <li>
+              Filter Query (fq)
+              <br/><code class="syntax">select/?q=Superhero&fq=bundle:person&fq=attribute:cape</code>
+            </li>
+            <li>
+              Fields (to return) (fl)
+              <br/><code class="syntax">select/?q=Superhero&fl=id,entity_id,name,attribute,score,...</code>
+            </li>
+            <li>
+              Highlighting (hl, hl.q, hl.fl)
+              <br/><code class="syntax">select/?q=Superhero&hl=true&hl.q=super&hl.fl=name,content,comments</code>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>Wait, I've seen many others..? Dismax/Edismax</h3>
+          <ul>
+            <li>
+              defType
+              <br/><code class="syntax">select/?q=Superhero AND evil&defType=edismax</code>
+            </li>
+            <li>
+              Alternative Query (q.alt)
+              <br/><code class="syntax">select/?q.alt=bundle:person</code>
+              <br/><span class="smaller-text">Can only be used if your q param is empty or not specified.</span>
+            </li>
+            <li>
+              Query fields (qf)
+              <br/><code class="syntax">select/?q=Superhero&qf=teaser^2.0</code>
+              <br/><span class="smaller-text">Feld type boosting.</span>
+            </li>
+            <li>
+              Phrase Fields (pf)
+              <br/><code class="syntax">select/?q=Robin Hood&pf=name^10</code>
+              <br/><span class="smaller-text">Document type boosting.</span>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h3>How to use Elevate.xml</h3>
+          <pre class="syntax php-script">
+&lt;elevate&gt;
+&lt;query text=&quot;Superman&quot;&gt;&lt;doc id=&quot;HASH/node/248813&quot; /&gt;&lt;/query&gt;
+&lt;/elevate&gt;
+          </pre>
+        </section>
+        <section>
+          <h3>Why are the schema and solrconfig.xml different in Search Api Solr and Apachesolr?</h3>
+          <img src="images/why.jpg" width="400px"/><br/>
+          <span><a href="http://drupal.org/sandbox/cpliakas/1600962">http://drupal.org/sandbox/cpliakas/1600962</a></span>
+        </section>
+        <section>
+          <h3>How can I Debug Solr</h3>
+          <br/><code class="syntax">select/?q=Robin Hood&somecomplexthing&debugQuery=on&debug=on</code>
+          <br/><code class="syntax">select/?q=Robin Hood&somecomplexthing&indent=true</code>
+          <br/><code class="syntax">admin/analysis.jsp?highlight=on</code>
+          <br/>Jetty Console (live query log when starting with "java start.jar")
+        </section>
+        <section>
+          <h3>How can I enable replication in Solr?</h3>
+          <img src="images/replication.jpg" width="600px"/><br/>
+        </section>
+        <section>
+          <h3>How can I enable replication in Solr?</h3>
+          <pre class="syntax php-script">
+#solrcore.properties file
+enable.master=false
+enable.slave=true
+poll_time=00:02:00
+master_core_url=http://localhost:8983/solr/MYMASTERCORE
+          </pre>
+          <span>This file or support is not yet committed to both projects,
+            but the initiative is making sure it will</span>
+        </section>
+        <section>
+          <h3>How can I monitor my Solr?</h3>
+          <img src="images/newrelic.jpg" width="500px"/><br/>
+
+          New Relic + mbeans (nagios, ...)
+        </section>
+      </section>
+      <section id="solr-performance" data-template="rotation">
+        <h1 class="title">Performance &AMP; Drupal</h1>
+        <section>
+          <h3>Performance testing Acquia Search</h3>
+          <ul class="small-text">
+            <li>MergePolicies
+              <ul>
+                <li>LogByteSizeMergePolicy (1.4)</li>
+                <li>LogDocMergePolicy (1.4)</li>
+                <li>TieredMergePolicy (3.x)</li>
+              </ul>
+            </li>
+            <li>Jmeter/Apache Access Logs</li>
+            <li>CentOS 5 - 2.6.18-xenU-ec2-v1.0 vs Ubuntu 10.04.4 - 2.6.32-341-ec2</li>
+           </ul>
+          <div style="float:left; width:350px" class="small-text">
+            <h3>Specifications of the Master</h3>
+            Large Instance (M1.large)<br/>
+            7.5 GB memory<br/>
+            4 EC2 Compute Units (2 virtual cores with 2 EC2 Compute Units each)<br/>
+          </div>
+          <div style="float:left; width:350px" class="small-text">
+            <h3>Specifications of the Slave</h3>
+            High-CPU Medium Instance (C1.medium)<br/>
+            1.7 GB of memory<br/>
+            5 EC2 Compute Units (2 virtual cores with 2.5 EC2 Compute Units each)<br/>
+          </div>
+          <div style="clear:both"></div>
+        </section>
+        <section>
+          <h3>Performance Graphs (Buytaert.net)</h3>
+            <div class="inner-graph">
+              <div id="chart_div" style="width: 800px; height: 450px;"></div>
+            </div>
+        </section>
+        <section>
+          <h3>Performance Graphs</h3>
+          <div class="outer">
+            <div class="inner-graph">
+              <div id="chart_div2" style="width: 800px; height: 450px;"></div>
+            </div>
+          </div>
+          <div style="clear:both"></div>
+        </section>
+        <section>
+          <h3>Performance conclusions</h3>
+          <ul>
+            <li>Keep LogByteMergePolicy with factor 4</li>
+            <li>TieredMergePolicy very interesting. Completely different</li>
+            <li>Solr 3.5 faster than Solr 1.4.1</li>
+            <li>Don't rely on default settings</li>
+            <li>Set Lucene version explicitly</li>
+          </ul>
+        </section>
+      </section>
+      <section id="future" data-template="rotation">
+        <h1 class="title">&nbsp;Future of Solr Search&nbsp;</h1>
+        <section>
+          <h1>Joint forces</h1>
+          <img src="images/Happy_kity.jpg" width="700px"/><br/>
+
+        </section>
+        <section>
+          <h3>Joint forces</h3>
+          <ul>
+            <li>Apache Solr Common Configurations</li>
+            <li>Acquia Search for Search API</li>
+            <li>No plans Drupal 8 core</li>
+            <li>GSOC Project Search API Statistics</li>
+            <li>More geo and mapping integration</li>
+            <li>Search Api with Apachesolr backend??</li>
+            <li>Ideas?</li>
+          </ul>
+        </section>
+      </section>
+      <section id="questions">
+        <h1 class="title">&nbsp;Questions?&nbsp;</h1>
+        <h3>Thanks for your attention!</h3>
+      </section>
+    </article>
+  </body>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="js/stats.js"></script>
+</html>
